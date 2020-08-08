@@ -1,0 +1,263 @@
+<script>
+     /*
+        isEven 함수를 작성하시오
+        
+        isEven(30); //true
+        isEven(29); //false
+
+        짝수 홀수 구분
+        ㄴif( 조건식 ){}
+        
+    */
+    function isEven( num ){
+        if( ( num % 2 ) === 0 ){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    /* 문 -> 식  */
+    function isEven( num ){
+       // return ( num % 2 ) === 0? ture : false; >굳이
+        return ( num % 2 ) === 0; //이 자체로 식
+    }
+
+    /*
+        max함수를 작성하시오.
+
+        todo: 2개의 숫자를 받아(2개의 인자를 받아) 더 큰 숫자를 반환한다. 
+        1. max(1,10); //10
+        2. max(50,-2) //50
+        3. max(20,20) //20
+
+        타입을 고려해보기
+    */
+
+    function max( a , b ){
+        //1. 문
+        if (a > b){
+            return a;
+        }else{
+            return b;
+        }
+
+        // 2. 식
+        return a > b? a : b; //식으로 변환
+    }
+
+    /*
+        fizzBuzz 함수를 작성하시오.
+        1. 3나누어 떨어지면 "Fizz" 반환
+            ex) fizzBUss(3) //"Fizz"
+        2.5로 나누어 떨어지면 "Buzz"반환
+        3. 3으로도 5로도 나누어 떨어지면 "FIzzBuzz"반환
+        4. 이외의 숫자는 넣은 숫자 그대로 반환
+    */
+     
+    //라희
+    function myfizzBuzz( num ){
+        if( ( num % 3 ) === 0){
+            return "Fizz";
+        }else if( ( num % 5 ) === 0){
+            return "Buzz";
+        }else if( ( num % 3 ) === 0 && (num % 5 ) === 0 ){
+            return "FIzzBuzz";
+        }else{
+            return num;
+        }
+    }
+
+ 
+    /** 쓰앵님
+     *  fizzBUss(3) //"Fizz"
+     *  fizzBUss(5) //"Buzz"
+     *  fizzBUss(15) //"FizzBuzz"
+     *  fizzBUss(1) //1
+     * 
+     * 문자와 숫자가 반환된다 
+    */
+
+    function fizzBuzz( num ){
+        if (num % 15 === 0) return "fizzBuzz"; //3,5 의 최소공배수' 조건식을 맨 위로 올리기
+        if (num % 3 === 0) return "fizz";
+        if (num % 5 === 0) return "Buzz";
+       
+        return num;
+    }
+
+
+    /**
+     *  grade 함수를 작성하시오
+     * 1. 국영수 3개 과목의 점수를 받는다.
+     * 2. 평균값에 따라 수우미양가를 반환한다.
+     * 
+    */
+    
+    function garde( kor, eng, math ){
+      
+        const total = kor + eng + math;
+        const average = total/3;
+
+        if( average >= 95 ) return "수";
+        if( average >= 90 ) return "우";
+        if( average >= 85 ) return "미";
+        if( average >= 80 ) return "양";
+        return "가";
+    }
+
+
+    function getDayOfWeek(dayNum){
+        switch (dayNum) {
+            case 0 : return "Sunday";
+            case 1 : return "Monday";
+            case 6 : return "Saturday";
+            default: return null;
+        }
+    }
+    getDayOfWeek(0); //  sunday
+    getDayOfWeek(6); //  Saturday
+
+
+
+    /*  const/let 변수를 재할당 할 수 있냐의 차이  */
+
+
+    //구구단 2단 출력하기
+    function dispalyGugudan(){
+        let i = 1;
+        while( i <= 9 ){
+            console.log( '2'+'*'+  i + '=' + (2*i) );
+            i++;  
+        }
+    }
+    dispalyGugudan();
+
+    
+    // dispalyGugudan 5단 출력하기
+    function dispalyGugudan(dan){
+        let i = 1;
+        while( i <= 9 ){
+            console.log( dan +'*'+ i + '=' + (dan * i) );
+            i++;  
+        }
+    }
+    dispalyGugudan(5);
+
+
+
+    /** 
+     * fizzBuzzGame(50); 
+     * 50까자 출력하기
+    */
+
+    function fizzBuzzGame( limit ){
+        let cnt = 1; 
+        while( cnt <= limit ){
+            console.log( fizzBuzz(cnt) );
+            cnt++;
+        }
+    }
+    fizzBuzzGame();
+
+
+
+
+    /**
+     * [숙제]
+     * loop 함수를 구현하라
+     * 
+    */
+
+
+
+
+
+    /*
+        숙제
+        외부에서 들어와선 내부에서 실행된다 라는 걸 이해 
+    */
+    function fizzBuzz(i){
+        let answer;
+
+        if ( i % 15 ) return "fizzBuzz";
+        if ( i % 3 ) return "fizz";
+        if ( i % 5 ) return "Buzz";
+
+    }
+
+    /* loop 함수를 구현하라 */
+    function loop(func, num) {
+        for (let i = 1; i <= num; i++) {
+            func(num);
+        }
+    }
+
+    function loop(func, num) {
+       let i = 1; 
+       while(i<=num){
+           func(i);
+           i++
+           //func(i++);
+       }
+        
+    }
+
+    /*
+        동기적
+        ㄴ실행의 순서가 명확하다. 
+
+        비동기적
+        ㄴ
+    */
+
+    loop( function(i) {
+        console.log(fizzBuzz(i));
+    }, 6);
+
+    /*
+        setInterval 을 이용한 loop
+    */
+
+
+    function asyncLoop( cb, cnt , timeout ){
+        for (let i = 1; i <= cnt; i++) {
+            setTimeout( function(){
+                cb(i);            
+            }, timeout*i );
+        }
+    }
+
+   // 6이 반복되어 출력
+
+    function asyncLoop( cb, cnt , timeout ){
+        let i = 1; 
+        while( i <= cnt ){
+            const index = i;
+            setTimeout( function(){
+                cb(index);            
+            }, timeout * index );
+            i++;
+        }
+    }
+
+    function asyncLoop( cb, cnt , timeout ){
+        let  = 0;
+        const intervalId = setInterval( function(){
+            if ( i ++ <= cnt ){
+                cb(i);
+            }else{
+                clearInterval(intervalId);
+            }
+        }, timeout);
+    }
+
+    //실행
+    asyncLoop( function(i){
+        console.log(i);
+    },5 , 1000);
+
+
+
+
+</script>
