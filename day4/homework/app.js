@@ -6,42 +6,41 @@ function renderHtml(component) {
     screen.innerHTML = component;
 }
 
-function button(props) {
-    // TODO
-    // props = {
-    //     id: "btn",
-    //     children: "토글",
-    // }
+// function button(props) {
+//     return `<button id="${props.id}">${props.children}</button>`
+// }
 
-    // return '<button type="button" id=' + props.id + '>' + props.children + '</button>';
-    return `<button type="button" id="${props.id}">
-                ${props.children}
-            </button>`
+function button({id, children}) {
+    return `<button id="${id}">${children}</button>`
 }
 
 function $(selector) {
-    const el = document.querySelector(selector);
-    console.log(el);
-
+    const el = typeof selector === "string" ? document.querySelector(selector) : selector
+    // let el;
+    // if (typeof selector === "string") {
+    //     el = document.querySelector(selector);
+    // } else {
+    //     el = selector;
+    // }
     return {
-        on: function(eventName, cb){
-            el.addEventListener(eventName, cb);
+        on(eventName, callback) {
+            el.addEventListener(eventName, callback)
         },
-        hasClass: function(className) {
-            return el.classList.contains(className);
+        addClass(className) {
+            el.classList.add(className)
         },
-        addClass: function(className) {
-            el.classList.add(className);
+        removeClass(className) {
+            el.classList.remove(className)
         },
-        removeClass: function(className) {
-            el.classList.remove(className);
+        hasClass(className) {
+            return el.classList.contains(className)
         }
     }
 }
 
 
 /******* 이 아래 사용자 코드는 수정하는 부분이 아닙니다. *******/
-const toggleButton = button( {id: "btn", children: "토글"} );
+const toggleButton = button({id: "btn", children: "토글"});
 renderHtml(toggleButton);
 
 $("#btn").on("click", function() {
