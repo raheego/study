@@ -21,8 +21,13 @@ import BoardPage from "./pages/BoardPage";
 import HomePage from "./pages/HomePage";
 import BoardDetailPage from "./pages/BoardDetail";
 import BoardCreatePage from "./pages/BoardCreatePage";
-import {useRecoilState} from "recoil/dist";
-import {pageState} from "./state/PageState";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const drawerWidth = 240;
 
@@ -87,7 +92,6 @@ export default function App() {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = useState(false);
-  const [page, setPage] = useRecoilState(pageState)
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -97,70 +101,90 @@ export default function App() {
     setOpen(false);
   };
 
-  const changePage = (page) => {
-    setPage(page)
-    setOpen(false)
-  }
+  const closeDrawer = () => setOpen(false)
 
   return (
-    <div className={classes.root}>
-      <CssBaseline />
-      <AppBar
-        position="fixed"
-        className={clsx(classes.appBar, {
-          [classes.appBarShift]: open,
-        })}
-      >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            className={clsx(classes.menuButton, open && classes.hide)}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap>
-            Persistent drawer
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        className={classes.drawer}
-        variant="persistent"
-        anchor="left"
-        open={open}
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-      >
-        <div className={classes.drawerHeader}>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-          </IconButton>
-        </div>
-        <Divider />
-        <List>
-          {[{text: '홈', page: "HOME"}, {text: '게시판', page: "BOARD"}].map((it, index) => (
-            <ListItem button key={it.text} onClick={() => changePage(it.page)}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={it.text} />
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
-      <main
-        className={clsx(classes.content, {
-          [classes.contentShift]: open,
-        })}
-      >
-        <div className={classes.drawerHeader} />
-        {page === "HOME" ?
-          <HomePage /> : page === "BOARD" ?
-            <Suspense fallback={"..loading"}><BoardPage /></Suspense> :
-            page === "CREATE_BOARD" ? <BoardCreatePage /> : <BoardDetailPage />}
-      </main>
-    </div>
+    <Router>
+      <div className={classes.root}>
+        <CssBaseline />
+        <AppBar
+          position="fixed"
+          className={clsx(classes.appBar, {
+            [classes.appBarShift]: open,
+          })}
+        >
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              className={clsx(classes.menuButton, open && classes.hide)}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" noWrap>
+              Persistent drawer
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <Drawer
+          className={classes.drawer}
+          variant="persistent"
+          anchor="left"
+          open={open}
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+        >
+          <div className={classes.drawerHeader}>
+            <IconButton onClick={handleDrawerClose}>
+              {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+            </IconButton>
+          </div>
+          <Divider />
+          <List>
+            {[{text: '홈', page: "/home"}, {text: '게시판', page: "/boards"}].map((it, index) => (
+              <Link to={it.page} key={it.page}>
+                <ListItem button onClick={closeDrawer}>
+                  <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                  <ListItemText primary={it.text} />
+                </ListItem>
+              </Link>
+            ))}
+          </List>
+        </Drawer>
+        <main
+          className={clsx(classes.content, {
+            [classes.contentShift]: open,
+          })}
+        >
+          <div className={classes.drawerHeader} />
+          <Switch>
+            <Route path={"/"} exact>
+              <HomePage />
+            </Route>
+            <Route path={"/home"}>
+              <HomePage />
+            </Route>
+            <Route path={"/boards/post"}>
+              <Suspense fallback={<CircularProgress />}>
+                <BoardCreatePage />
+              </Suspense>
+            </Route>
+            <Route path={`/boards/:id`}>
+              <Suspense fallback={<CircularProgress />}><BoardDetailPage /></Suspense>
+            </Route>
+            <Route path={"/boards"}>
+              <Suspense fallback={<CircularProgress />}><BoardPage /></Suspense>
+            </Route>
+          </Switch>
+          {/*{page === "HOME" ?*/}
+          {/*  <HomePage /> : page === "BOARD" ?*/}
+          {/*    <Suspense fallback={"..loading"}><BoardPage /></Suspense> :*/}
+          {/*    page === "CREATE_BOARD" ? <BoardCreatePage /> : <BoardDetailPage />}*/}
+        </main>
+      </div>
+    </Router>
   );
 }

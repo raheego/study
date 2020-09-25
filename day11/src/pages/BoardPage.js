@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -7,11 +7,10 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import {getBoards} from "../apis/boardApi";
 import Button from "@material-ui/core/Button";
 import {useRecoilState} from "recoil/dist";
-import {pageState} from "../state/PageState";
 import {boardState} from "../state/boardState";
+import {Link} from "react-router-dom";
 
 const useStyles = makeStyles({
   table: {
@@ -21,14 +20,14 @@ const useStyles = makeStyles({
 
 export default function BoardPage() {
   const classes = useStyles();
-  const [boards, setBoards] = useRecoilState(boardState)
-  const [page, setPage] = useRecoilState(pageState)
+  const [boards] = useRecoilState(boardState)
 
   return (
     <>
       <Button color={"primary"}
               variant={"contained"}
-              onClick={() => setPage("CREATE_BOARD")}
+              component={Link}
+              to={"/boards/post"}
       >
         작성하기
       </Button>
@@ -43,7 +42,7 @@ export default function BoardPage() {
           </TableHead>
           <TableBody>
             {boards.map((row) => (
-              <TableRow key={row.id} hover>
+              <TableRow key={row.id} hover component={Link} to={`/boards/${row.id}`}>
                 <TableCell component="th" scope="row">
                   {row.title}
                 </TableCell>
